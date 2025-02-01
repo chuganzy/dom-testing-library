@@ -67,25 +67,27 @@ function createEvent(
   dataTransferProperties.forEach(dataTransferKey => {
     const dataTransferValue = eventInit[dataTransferKey]
 
-    if (typeof dataTransferValue === 'object') {
-      /* istanbul ignore if */
-      if (typeof window.DataTransfer === 'function') {
-        Object.defineProperty(event, dataTransferKey, {
-          value: Object.getOwnPropertyNames(dataTransferValue).reduce(
-            (acc, propName) => {
-              Object.defineProperty(acc, propName, {
-                value: dataTransferValue[propName],
-              })
-              return acc
-            },
-            new window.DataTransfer(),
-          ),
-        })
-      } else {
-        Object.defineProperty(event, dataTransferKey, {
-          value: dataTransferValue,
-        })
-      }
+    if (typeof dataTransferValue !== 'object') {
+      return
+    }
+
+    /* istanbul ignore if */
+    if (typeof window.DataTransfer === 'function') {
+      Object.defineProperty(event, dataTransferKey, {
+        value: Object.getOwnPropertyNames(dataTransferValue).reduce(
+          (acc, propName) => {
+            Object.defineProperty(acc, propName, {
+              value: dataTransferValue[propName],
+            })
+            return acc
+          },
+          new window.DataTransfer(),
+        ),
+      })
+    } else {
+      Object.defineProperty(event, dataTransferKey, {
+        value: dataTransferValue,
+      })
     }
   })
 
