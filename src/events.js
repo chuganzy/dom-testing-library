@@ -68,7 +68,7 @@ function createEvent(
     const dataTransferValue = eventInit[dataTransferKey]
 
     if (typeof dataTransferValue === 'object') {
-      /* istanbul ignore if  */
+      /* istanbul ignore if */
       if (typeof window.DataTransfer === 'function') {
         Object.defineProperty(event, dataTransferKey, {
           value: Object.getOwnPropertyNames(dataTransferValue).reduce(
